@@ -26,72 +26,14 @@ app.get('/', function (req, res) {
     res.send(response);
 });
 
-app.get('/book', function (req, res) {
-    response = {
-        error: false,
-        code: 200,
-        message: ''
-    };
-
-    if (book.title === '' || book.author === '') {
-        response = {
-            error: true,
-            code: 501,
-            message: 'The book has not been created.'
-        };
-    } else {
+app.route('/book')
+    .get(function (req, res) {
         response = {
             error: false,
             code: 200,
-            message: 'Response of the book',
-            response: book
+            message: ''
         };
-    }
-
-    res.send(response);
-});
-
-app.post('/book', function (req, res) {
-    if (!req.body.title || !req.body.author) {
-        response = {
-            error: true,
-            code: 502,
-            message: 'The title and author fields are required.'
-        };
-    } else {
-        if (book.title !== '' || book.author !== '') {
-            response = {
-                error: true,
-                code: 503,
-                message: 'The book was created previously.',
-                response: book
-            };
-        } else {
-            book = {
-                title: req.body.title,
-                author: req.body.author
-            };
-
-            response = {
-                error: false,
-                code: 200,
-                message: 'Book created.',
-                response: book
-            };
-        }
-    }
-
-    res.send(response);
-});
-
-app.put('/book', function (req, res) {
-    if (!req.body.title || !req.body.author) {
-        response = {
-            error: true,
-            code: 502,
-            message: 'The title and author fields are required.'
-        };
-    } else {
+    
         if (book.title === '' || book.author === '') {
             response = {
                 error: true,
@@ -99,45 +41,101 @@ app.put('/book', function (req, res) {
                 message: 'The book has not been created.'
             };
         } else {
-            book = {
-                title: req.body.title,
-                author: req.body.author
-            };
-
             response = {
                 error: false,
                 code: 200,
-                message: 'Book updated.',
+                message: 'Response of the book',
                 response: book
             };
         }
-    }
-
-    res.send(response);
-});
-
-app.delete('/book', function (req, res) {
-    if (book.title === '' || book.author === '') {
-        response = {
-            error: true,
-            code: 501,
-            message: 'The book has not been created.'
-        };
-    } else {        
-        response = {
-            error: false,
-            code: 200,
-            message: 'Book deleted.'
-        };
-
-        book = {
-            title: '',
-            author: ''
-        };
-    }
-
-    res.send(response);
-});
+    
+        res.send(response);
+    })
+    .post(function (req, res) {
+        if (!req.body.title || !req.body.author) {
+            response = {
+                error: true,
+                code: 502,
+                message: 'The title and author fields are required.'
+            };
+        } else {
+            if (book.title !== '' || book.author !== '') {
+                response = {
+                    error: true,
+                    code: 503,
+                    message: 'The book was created previously.',
+                    response: book
+                };
+            } else {
+                book = {
+                    title: req.body.title,
+                    author: req.body.author
+                };
+    
+                response = {
+                    error: false,
+                    code: 200,
+                    message: 'Book created.',
+                    response: book
+                };
+            }
+        }
+    
+        res.send(response);
+    })
+    .put(function (req, res) {
+        if (!req.body.title || !req.body.author) {
+            response = {
+                error: true,
+                code: 502,
+                message: 'The title and author fields are required.'
+            };
+        } else {
+            if (book.title === '' || book.author === '') {
+                response = {
+                    error: true,
+                    code: 501,
+                    message: 'The book has not been created.'
+                };
+            } else {
+                book = {
+                    title: req.body.title,
+                    author: req.body.author
+                };
+    
+                response = {
+                    error: false,
+                    code: 200,
+                    message: 'Book updated.',
+                    response: book
+                };
+            }
+        }
+    
+        res.send(response);
+    })
+    .delete(function (req, res) {
+        if (book.title === '' || book.author === '') {
+            response = {
+                error: true,
+                code: 501,
+                message: 'The book has not been created.'
+            };
+        } else {        
+            response = {
+                error: false,
+                code: 200,
+                message: 'Book deleted.'
+            };
+    
+            book = {
+                title: '',
+                author: ''
+            };
+        }
+    
+        res.send(response);
+    });
 
 app.use(function(req, res, next) {
     response = {
